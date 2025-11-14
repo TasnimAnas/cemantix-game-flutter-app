@@ -2,6 +2,7 @@ import 'package:cemantix/models/word_model.dart';
 import 'package:cemantix/widgets/cemantix_game_screen.dart';
 import 'package:cemantix/providers/words_provider.dart';
 import 'package:cemantix/widgets/progress_bar.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme.dart';
@@ -21,11 +22,15 @@ class _HomePageState extends State<HomePage> {
   late List<WordModel> _items;
   WordsProvider? _provider;
   final Set<int> _recentInserted = {};
+  late ConfettiController _confettiController;
 
   @override
   void initState() {
     super.initState();
     _items = [];
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
   }
 
   @override
@@ -131,6 +136,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _provider?.removeListener(_onProviderChange);
+    _confettiController.dispose();
     super.dispose();
   }
 
@@ -151,43 +157,71 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    if (current.temparature >= 100 || current.progress >= 1000) {
+      _confettiController?.play();
+    }
+
     return Card(
       color: kCard,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
+        child: Stack(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    current.word,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  if (current.progress != 0)
-                    ProgressBar(progress: current.progress),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Column(
+            Row(
               children: [
-                Text(
-                  'Rank: ${p.currentRank}',
-                  style: Theme.of(context).textTheme.labelLarge,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        current.word,
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+
+                      if (current.progress != 0)
+                        ProgressBar(progress: current.progress),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  formatTemperatureWithEmoji(current.temparature),
-                  style: Theme.of(context).textTheme.headlineMedium,
+                const SizedBox(width: 12),
+                Column(
+                  children: [
+                    Text(
+                      'Rank: ${p.currentRank}',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      formatTemperatureWithEmoji(current.temparature),
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ],
                 ),
               ],
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.directional,
+                emissionFrequency: 0.05,
+                numberOfParticles: 20,
+                gravity: 0.1,
+                shouldLoop: false,
+                colors: const [
+                  Colors.green,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.orange,
+                  Colors.purple,
+                  Colors.yellow,
+                  Colors.red,
+                  Colors.cyan,
+                ],
+              ),
             ),
           ],
         ),

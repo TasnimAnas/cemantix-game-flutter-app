@@ -11,7 +11,7 @@ class ProgressBar extends StatefulWidget {
     required this.progress,
     this.maxValue = 1000,
     this.height = 5,
-    this.width = 150,
+    this.width = 115,
   });
 
   @override
