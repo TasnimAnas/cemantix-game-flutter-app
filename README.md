@@ -9,9 +9,10 @@ This README gives a short overview of the design decisions, how to run the app o
 ## Screenshots
 
 <p float="left">
-  <img src="screenshots/home_page.png" alt="Home screen" width="32%" />
-  <img src="screenshots/history_page.png" alt="History list" width="32%" />
-  <img src="screenshots/history_details_page.png" alt="History detail" width="32%" />
+  <img src="screenshots/home_page.png" alt="Home screen" width="24.5%" />
+  <img src="screenshots/correct_guess.png" alt="Correct Guess" width="24.5%" />
+  <img src="screenshots/history_page.png" alt="History list" width="24.5%" />
+  <img src="screenshots/history_details_page.png" alt="History detail" width="24.5%" />
 </p>
 
 ## Quick architecture summary
@@ -48,20 +49,24 @@ Requirements
 Typical steps
 
 1. Clone the repository and open it in your editor:
+
    ```
    git clone git@github.com:TasnimAnas/cemantix-game-flutter-app.git
    cd cemantix-game-flutter-app
    ```
 
 2. Fetch packages:
+
    ```
    flutter pub get
    ```
 
 3. Run on a connected device or emulator:
+
    ```
    flutter run
    ```
+
    (You can list devices with `flutter devices` and run on a specific one with `flutter run -d <deviceId>`.)
 
 4. Build a release APK (Android):
