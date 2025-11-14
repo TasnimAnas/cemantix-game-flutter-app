@@ -6,6 +6,14 @@ Cemantix is a small Flutter game app that practices word/meaning recognition and
 
 This README gives a short overview of the design decisions, how to run the app on your machine, how to test it manually (no automated tests included yet), and a few ideas for features you might add.
 
+## Screenshots
+
+<p float="left">
+  <img src="screenshots/home_page.png" alt="Home screen" width="32%" />
+  <img src="screenshots/history_page.png" alt="History list" width="32%" />
+  <img src="screenshots/history_details_page.png" alt="History detail" width="32%" />
+</p>
+
 ## Quick architecture summary
 
 - Flutter app (Dart) with a single entry point at `lib/main.dart`.
@@ -40,18 +48,26 @@ Requirements
 Typical steps
 
 1. Clone the repository and open it in your editor:
+   ```
    git clone git@github.com:TasnimAnas/cemantix-game-flutter-app.git
    cd cemantix-game-flutter-app
+   ```
 
 2. Fetch packages:
+   ```
    flutter pub get
+   ```
 
 3. Run on a connected device or emulator:
+   ```
    flutter run
+   ```
    (You can list devices with `flutter devices` and run on a specific one with `flutter run -d <deviceId>`.)
 
 4. Build a release APK (Android):
+   ```
    flutter build apk --release
+   ```
 
 Notes
 
@@ -69,14 +85,6 @@ Notes
   - Start the game, produce some results, and confirm they persist across app restarts (this exercises `storage_service.dart`).
   - Toggle network (if the app relies on the API service for word data) and validate graceful handling of failures.
 
-## Screenshots
-
-<p float="left">
-  <img src="screenshots/home_page.png" alt="Home screen" width="32%" />
-  <img src="screenshots/history_page.png" alt="History list" width="32%" />
-  <img src="screenshots/history_details_page.png" alt="History detail" width="32%" />
-</p>
-
 ## Where to look in the code
 
 - Entry point: `lib/main.dart` — app setup and bottom navigation.
@@ -91,10 +99,14 @@ Notes
 
 - Add user profiles with names/avatars and local leaderboards per profile.
 - Cloud sync: allow users to back up/restore history via a simple backend (Firebase, Supabase, or a custom API).
-- Word packs & difficulty levels: let users choose curated sets or difficulty sliders from a custom own backend.
+- Word packs & difficulty levels: let users choose curated sets or difficulty sliders from a custom backend.
+- Add a dictionary so that users can translate French to English and use the app to learn new French words!
+- Support other languages, targeting a wide range of users.
+- Gamify more, letting users earn points, have shareable profile links, and play in groups (fastest to solve in a group, etc)
 
 Long-term / developer features
 
+- Self-hosted backend
 - Automated tests: unit tests for providers/services and widget tests for critical UI flows.
 - CI pipeline: run `dart analyze`, `dart format --output=none`, and tests on push.
 - A mini admin interface to add/remove word packs or curate content.
