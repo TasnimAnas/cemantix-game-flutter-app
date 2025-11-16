@@ -1,4 +1,4 @@
-const IS_TESTING = false;
+const IS_TESTING = true;
 const HISTORY_KEY = 'word_histories';
 const SKY_BG_WORDS = [
   "bonjour",

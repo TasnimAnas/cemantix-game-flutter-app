@@ -8,6 +8,20 @@ This README gives a short overview of the design decisions, how to run the app o
 
 ## Screenshots
 
+#### Guessing:
+
+<p float="left">
+    <img src="screenshots/working.gif" alt="Guessing" />
+</p>
+
+#### Animated floating background:
+
+<p float="left">
+      <img src="screenshots/animated_bg.gif" alt="bg" width="45%" />
+</p>
+
+#### States:
+
 <p float="left">
   <img src="screenshots/home_page.png" alt="Home screen" width="30%" />
   <img src="screenshots/guesses.png" alt="Correct Guess" width="30%" />
