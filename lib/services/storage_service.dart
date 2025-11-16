@@ -1,14 +1,13 @@
 import 'dart:convert';
+import 'package:cemantix/const.dart';
 import 'package:cemantix/models/history_model.dart';
 import 'package:cemantix/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
-  static const String _historyKey = 'word_histories';
-
   static Future<HistoryModel?> getItemByDate(String dateIso) async {
     final prefs = await SharedPreferences.getInstance();
-    final String? historyJson = prefs.getString(_historyKey);
+    final String? historyJson = prefs.getString(HISTORY_KEY);
     if (historyJson == null || historyJson.isEmpty) return null;
 
     try {
@@ -28,12 +27,12 @@ class StorageService {
 
   static Future<void> updateItem(HistoryModel updatedItem) async {
     final prefs = await SharedPreferences.getInstance();
-    final String? historyJson = prefs.getString(_historyKey);
+    final String? historyJson = prefs.getString(HISTORY_KEY);
 
     // If no stored history yet, create a new list containing the item.
     if (historyJson == null || historyJson.isEmpty) {
       final initial = [updatedItem.toJson()];
-      await prefs.setString(_historyKey, jsonEncode(initial));
+      await prefs.setString(HISTORY_KEY, jsonEncode(initial));
       return;
     }
 
@@ -50,15 +49,15 @@ class StorageService {
       } else {
         historyList.add(updatedItem.toJson());
       }
-      await prefs.setString(_historyKey, jsonEncode(historyList));
+      await prefs.setString(HISTORY_KEY, jsonEncode(historyList));
     } catch (e) {
-      await prefs.setString(_historyKey, jsonEncode([updatedItem.toJson()]));
+      await prefs.setString(HISTORY_KEY, jsonEncode([updatedItem.toJson()]));
     }
   }
 
   static Future<List<HistoryModel>> getHistoryItems() async {
     final prefs = await SharedPreferences.getInstance();
-    final String? historyJson = prefs.getString(_historyKey);
+    final String? historyJson = prefs.getString(HISTORY_KEY);
 
     if (historyJson == null || historyJson.isEmpty) return [];
 

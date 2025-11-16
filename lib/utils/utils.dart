@@ -34,5 +34,5 @@ String emojiForTemperature(double t) {
 
 String formatTemperatureWithEmoji(double t) {
   final emoji = emojiForTemperature(t);
-  return '${t.toStringAsFixed(4)}° $emoji';
+  return '${t.toStringAsFixed(2)}° $emoji';
 }

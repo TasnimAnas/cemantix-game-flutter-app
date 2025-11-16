@@ -1,7 +1,10 @@
 import 'package:cemantix/models/word_model.dart';
 import 'package:cemantix/widgets/cemantix_game_screen.dart';
 import 'package:cemantix/providers/words_provider.dart';
+import 'package:cemantix/widgets/winning_blast.dart';
+import 'package:cemantix/widgets/latest_guess.dart';
 import 'package:cemantix/widgets/progress_bar.dart';
+import 'package:cemantix/widgets/word_sky_background.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -141,8 +144,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildLatestCard(WordsProvider p) {
-    final current = p.currentWord;
-    if (current == null) {
+    if (p.currentWord == null && _items.isEmpty) {
       return Card(
         color: kCard,
         clipBehavior: Clip.antiAlias,
@@ -157,75 +159,25 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    if (current.temparature >= 100 || current.progress >= 1000) {
+    final current = p.currentWord ?? _items.first;
+
+    if ((current.temparature >= 100 || current.progress >= 1000) &&
+        !p.showedConfetti &&
+        p.currentWord != null) {
       _confettiController?.play();
+      Future.delayed(Duration(seconds: 3), () {
+        p.setShowedConfetti(true);
+      });
     }
 
-    return Card(
-      color: kCard,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        current.word,
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
+    final progressFactor = (current.progress / 1000).clamp(0.0, 1.0);
 
-                      if (current.progress != 0)
-                        ProgressBar(progress: current.progress),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  children: [
-                    Text(
-                      'Rank: ${p.currentRank}',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      formatTemperatureWithEmoji(current.temparature),
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirectionality: BlastDirectionality.directional,
-                emissionFrequency: 0.05,
-                numberOfParticles: 20,
-                gravity: 0.1,
-                shouldLoop: false,
-                colors: const [
-                  Colors.green,
-                  Colors.blue,
-                  Colors.pink,
-                  Colors.orange,
-                  Colors.purple,
-                  Colors.yellow,
-                  Colors.red,
-                  Colors.cyan,
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    return LatestProgressCircle(
+      progress: progressFactor,
+      temperature: current.temparature,
+      progressValue: current.progress,
+      word: current.word,
+      rank: p.currentRank,
     );
   }
 
@@ -250,12 +202,12 @@ class _HomePageState extends State<HomePage> {
             curve: kAnimationCurve,
             shape: BoxShape.rectangle,
             elevation: isNew ? (kCardElevation + 6.0) : kCardElevation,
-            color: kCard,
+            color: kCard.withOpacity(.6),
             shadowColor: Theme.of(context).shadowColor,
             borderRadius: kCardRadius,
             child: Card(
               elevation: 0,
-              color: kCard,
+              color: Colors.transparent,
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -284,58 +236,88 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<WordsProvider>(
       builder: (context, p, _) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                const CemantixGameScreen(),
-                AnimatedSwitcher(
-                  duration:
-                      kAnimationDuration + const Duration(milliseconds: 400),
-                  switchInCurve: kAnimationCurve,
-                  switchOutCurve: Curves.easeInOut,
-                  transitionBuilder: (child, anim) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, -0.08),
-                        end: Offset.zero,
-                      ).animate(anim),
-                      child: FadeTransition(opacity: anim, child: child),
-                    );
-                  },
-                  child: KeyedSubtree(
-                    key: ValueKey(p.currentWord?.word ?? 'empty'),
-                    child: _buildLatestCard(p),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Today\'s guesses',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
+        return Stack(
+          children: [
+            Positioned.fill(child: WordSkyBackground()),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text(
+                      'Cemantix',
+                      style: Theme.of(context).textTheme.headlineLarge
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: kAccent,
+                          ),
+                      textAlign: TextAlign.center,
                     ),
-                    child: AnimatedList(
-                      padding: EdgeInsets.all(10),
-                      key: _listKey,
-                      controller: _listController,
-                      initialItemCount: _items.length,
-                      itemBuilder: _buildListItem,
+                    SizedBox(height: 2),
+                    Text(
+                      getTodaysDate(),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: kAccent,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
+                    const SizedBox(height: 24),
+                    _buildLatestCard(p),
+                    const SizedBox(height: 12),
+                    const CemantixGameScreen(),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Today\'s guesses',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: AnimatedList(
+                          padding: EdgeInsets.all(10),
+                          key: _listKey,
+                          controller: _listController,
+                          initialItemCount: _items.length,
+                          itemBuilder: _buildListItem,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+            WinningBlast(
+              confettiController: _confettiController,
+              alignment: Alignment.topLeft,
+              blastDirection: 0,
+            ),
+            WinningBlast(
+              confettiController: _confettiController,
+              alignment: Alignment.topRight,
+            ),
+            WinningBlast(
+              confettiController: _confettiController,
+              alignment: Alignment.center,
+              blastDirectionality: BlastDirectionality.explosive,
+            ),
+            WinningBlast(
+              confettiController: _confettiController,
+              alignment: Alignment.centerRight,
+            ),
+            WinningBlast(
+              confettiController: _confettiController,
+              alignment: Alignment.centerLeft,
+              blastDirection: 0,
+            ),
+          ],
         );
       },
     );

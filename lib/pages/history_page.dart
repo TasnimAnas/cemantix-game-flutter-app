@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'history_detail_page.dart';
 import '../theme.dart';
 import '../utils/utils.dart';
+import 'package:cemantix/widgets/word_sky_background.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -37,7 +38,7 @@ class _HistoryPageState extends State<HistoryPage> {
         ? formatTemperatureWithEmoji(h.words.first.temparature)
         : '-';
     return Card(
-      color: kCard,
+      color: kCard.withOpacity(.6),
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
@@ -93,7 +94,12 @@ class _HistoryPageState extends State<HistoryPage> {
         elevation: 0,
         iconTheme: IconThemeData(color: kAccent),
       ),
-      body: _buildBody(context),
+      body: Stack(
+        children: [
+          Positioned.fill(child: WordSkyBackground()),
+          _buildBody(context),
+        ],
+      ),
     );
   }
 

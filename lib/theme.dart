@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-const Color kPrimary = Color(0xFF8A9B68); // olive green
-const Color kPrimaryVariant = Color(0xFF937B63); // chamoisee
-const Color kAccent = Color(0xFFB6C197); // sage
-const Color kLabelColor = Color(0xFFD5DDBC); // beige
-const Color kBackgroundSolid = Color(0xFF071212);
-const Color kCard = Color(0xFF11221D); // slightly lighter for contrast
+const Color kPrimary = Color(0xFF6EE7F5); // cyan
+const Color kPrimaryVariant = Color(0xFF8A9B68); // fallback
+const Color kAccent = Color(0xFFFFFFFF); // bright accent for title
+const Color kLabelColor = Color(0xFFD5DDBC); // keep beige for labels
+const Color kBackgroundSolid = Color(0xFF071028); // deep navy
+const Color kCard = Color(0xFF0F1B2B); // slightly lighter for contrast
 const double kCardElevation = 8.0;
 
 /// Text color tokens (derived from white with opacities)

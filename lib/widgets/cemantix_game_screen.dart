@@ -46,9 +46,9 @@ class _CemantixGameScreenState extends State<CemantixGameScreen> {
       }
       _controller.clear();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Server error. Check your connection.')),
+      );
     } finally {
       setState(() => _isLoading = false);
     }
@@ -59,90 +59,65 @@ class _CemantixGameScreenState extends State<CemantixGameScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
           children: [
-            SizedBox(height: 10),
-            Text(
-              'Cemantix',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: kAccent,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 2),
-            Text(
-              getTodaysDate(),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: kAccent,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-
-            Row(
-              children: [
-                Expanded(
-                  child: AnimatedOpacity(
-                    duration: kAnimationDuration,
-                    opacity: _isLoading ? 0.6 : 1.0,
-                    child: TextField(
-                      controller: _controller,
-                      enabled: !_isLoading,
-                      onSubmitted: (_) => _submitGuess(context),
-                      decoration: InputDecoration(
-                        hintText: 'Enter the word...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        hintStyle: TextStyle(color: kTextHint),
-                        filled: true,
-                        fillColor: kCard,
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 14,
-                        ),
-                      ),
+            Expanded(
+              child: AnimatedOpacity(
+                duration: kAnimationDuration,
+                opacity: _isLoading ? 0.6 : 1.0,
+                child: TextField(
+                  controller: _controller,
+                  enabled: !_isLoading,
+                  onSubmitted: (_) => _submitGuess(context),
+                  decoration: InputDecoration(
+                    hintText: 'Enter the word...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintStyle: TextStyle(color: kTextHint),
+                    filled: true,
+                    fillColor: kCard,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 14,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                AnimatedSwitcher(
-                  duration: kAnimationDuration,
-                  transitionBuilder: (child, anim) => ScaleTransition(
-                    scale: anim,
-                    child: FadeTransition(opacity: anim, child: child),
-                  ),
-                  child: _isLoading
-                      ? SizedBox(
-                          key: ValueKey('loading'),
-                          width: 40,
-                          height: 40,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                kTextPrimary,
-                              ),
-                            ),
-                          ),
-                        )
-                      : SizedBox(
-                          key: ValueKey('send'),
-                          width: 40,
-                          height: 40,
-                          child: GradientButton(
-                            onPressed: () => _submitGuess(context),
-                            borderRadius: 999,
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(Icons.send, color: kTextPrimary),
+              ),
+            ),
+            const SizedBox(width: 12),
+            AnimatedSwitcher(
+              duration: kAnimationDuration,
+              transitionBuilder: (child, anim) => ScaleTransition(
+                scale: anim,
+                child: FadeTransition(opacity: anim, child: child),
+              ),
+              child: _isLoading
+                  ? SizedBox(
+                      key: ValueKey('loading'),
+                      width: 40,
+                      height: 40,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            kTextPrimary,
                           ),
                         ),
-                ),
-              ],
+                      ),
+                    )
+                  : SizedBox(
+                      key: ValueKey('send'),
+                      width: 40,
+                      height: 40,
+                      child: GradientButton(
+                        onPressed: () => _submitGuess(context),
+                        borderRadius: 999,
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(Icons.send, color: kTextPrimary),
+                      ),
+                    ),
             ),
           ],
         ),

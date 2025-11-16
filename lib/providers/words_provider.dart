@@ -13,6 +13,7 @@ class WordsProvider extends ChangeNotifier {
   bool _isLoading = true;
   String _todaysDate = '';
   int? _lastInsertedIndex;
+  bool _showedConfetti = false;
 
   WordsProvider() {
     init();
@@ -24,6 +25,7 @@ class WordsProvider extends ChangeNotifier {
   HistoryModel? get wordHistory => _wordHistory;
   String get todaysDate => _todaysDate;
   int? get lastInsertedIndex => _lastInsertedIndex;
+  bool get showedConfetti => _showedConfetti;
 
   Future<void> init() async {
     tz.initializeTimeZones();
@@ -32,6 +34,11 @@ class WordsProvider extends ChangeNotifier {
         await StorageService.getItemByDate(_todaysDate) ??
         HistoryModel(date: _todaysDate, words: []);
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void setShowedConfetti(bool value) {
+    _showedConfetti = value;
     notifyListeners();
   }
 
