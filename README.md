@@ -9,15 +9,15 @@ This README gives a short overview of the design decisions, how to run the app o
 ## Screenshots
 
 <p float="left">
-  <img src="screenshots/home_page.png" alt="Home screen" width="33%" />
-  <img src="screenshots/guesses.png" alt="Correct Guess" width="33%" />
-  <img src="screenshots/correct_guess.png" alt="History list" width="33%" />
+  <img src="screenshots/home_page.png" alt="Home screen" width="30%" />
+  <img src="screenshots/guesses.png" alt="Correct Guess" width="30%" />
+  <img src="screenshots/correct_guess.png" alt="History list" width="30%" />
 </p>
 
 <p float="left">
-  <img src="screenshots/history_page.png" alt="Home screen" width="33%" />
-  <img src="screenshots/history_page_1.png" alt="Correct Guess" width="33%" />
-  <img src="screenshots/history_details_page.png" alt="History list" width="33%" />
+  <img src="screenshots/history_page.png" alt="Home screen" width="30%" />
+  <img src="screenshots/history_page_1.png" alt="Correct Guess" width="30%" />
+  <img src="screenshots/history_details_page.png" alt="History list" width="30%" />
 </p>
 
 ## Quick architecture summary
