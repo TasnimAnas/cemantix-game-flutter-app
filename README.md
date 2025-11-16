@@ -11,13 +11,13 @@ This README gives a short overview of the design decisions, how to run the app o
 #### Guessing:
 
 <p float="left">
-    <img src="screenshots/working.gif" alt="Guessing" />
+    <img src="screenshots/working.gif" alt="Guessing" width="35%" />
 </p>
 
 #### Animated floating background:
 
 <p float="left">
-      <img src="screenshots/animated_bg.gif" alt="bg" width="45%" />
+      <img src="screenshots/animated_bg.gif" alt="bg" width="35%" />
 </p>
 
 #### States:
